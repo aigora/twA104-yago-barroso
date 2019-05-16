@@ -1,0 +1,188 @@
+#include <SoftwareSerial.h>
+SoftwareSerial bt(6,7); //pines 6 y 7 para el Bluetooth
+//motor1
+const int ENA=5;
+const int IN1=2;
+const int IN2=3;
+//motor2
+const int ENB =11;
+const int IN3=8;
+const int IN4=9;
+//enumeracion para los dos estados distintos
+typedef enum { 
+   contr,
+   controlando,
+}estado;
+bool encender = false;
+//funciones para el control del coche
+void recto();
+void atras();
+void derecha();
+void izquierda();
+void parar();
+//funciones para la contraseña
+void contrase (estado *ptipo);
+bool contrasenacorrecta();
+void control();
+
+void setup() {
+  Serial.begin(9600);
+  bt.begin(9600);
+  //todos los pines de los motores en modo SALIDA
+  pinMode(ENB, OUTPUT);
+  pinMode(ENA, OUTPUT);
+  pinMode(IN1, OUTPUT);
+  pinMode(IN2, OUTPUT);
+  pinMode(IN3, OUTPUT);
+  pinMode(IN4, OUTPUT);
+}
+void loop()
+{
+      if(bt.available()>0) //espera a recibir una orden del dispositivo conectado via Bluetooth
+  {
+    estado tipo;
+    if (!encender)
+   {
+    tipo=contr;
+
+    
+    }
+   else if(encender==true)
+    {
+      tipo=controlando;
+    }
+
+    switch (tipo)
+    {
+    case contr:
+     {
+
+  
+      if(contrasenacorrecta())
+      {
+
+        encender=true;
+
+      }
+      break;
+     }
+    case controlando:
+     {
+       control();
+       break;
+     }
+    }
+}
+}
+bool contrasenacorrecta() 
+{
+  char caracter1, contrasenaok[6]={'s','t','a','r','t'}, contrasenausuario[6];
+  int contador=0, i, a;
+  for(i=0;i<5;i++)
+  {
+    caracter1=bt.read();
+    delay(500);
+
+    contrasenausuario[i]=caracter1;
+    if(caracter1=='p')
+    {
+     bt.flush();
+     i=0;
+    }
+    
+    if (contrasenaok[i]==contrasenausuario[i])
+    {
+      contador++;
+
+    }
+  }
+  if (contador==5)
+  {
+
+    return(true);
+  }
+  else 
+  {
+    contador=0;
+  return(false);
+  
+  }
+}
+
+void control() {
+  
+    char dir=bt.read(); //lee lo que recibe desde el dispositivo Bluetooth
+    
+    if(dir=='w')
+    {
+      recto();
+    }
+    else if(dir=='s')
+    {
+      atras();
+    }
+    else if(dir=='d')
+    {
+      derecha();
+    }
+    else if(dir=='a')
+    {
+      izquierda();
+    }
+    else if(dir=='r')
+    {
+      parar();
+    }
+  }
+void recto()
+{
+  //motor1
+  digitalWrite(ENA, HIGH);
+  digitalWrite(IN1,LOW);
+  digitalWrite(IN2,HIGH);
+  //motor2
+  digitalWrite(ENB,HIGH);
+  digitalWrite(IN3, LOW);
+  digitalWrite(IN4, HIGH);
+}
+void atras()
+{
+  //motor1
+  digitalWrite(ENA, HIGH);
+  digitalWrite(IN1, HIGH);
+  digitalWrite(IN2, LOW);
+ //motor2
+  digitalWrite(ENB, HIGH);
+  digitalWrite(IN3, HIGH);
+  digitalWrite(IN4, LOW);
+}
+void derecha()
+{
+  //motor1
+  digitalWrite(ENA, HIGH);
+  digitalWrite(IN1, HIGH);
+  digitalWrite(IN2, LOW);
+  //motor2
+  digitalWrite(ENB, HIGH);
+  digitalWrite(IN3, LOW);
+  digitalWrite(IN4, HIGH);
+}
+void izquierda()
+{
+  //motor1
+  digitalWrite(ENA, HIGH);
+  digitalWrite(IN1, LOW);
+  digitalWrite(IN2, HIGH);
+ //motor2
+  digitalWrite(ENB, HIGH);
+  digitalWrite(IN3, HIGH);
+  digitalWrite(IN4, LOW);
+}
+void parar()
+{
+  //motor1
+  digitalWrite(ENA, LOW);
+ //motor2
+  digitalWrite(ENB, LOW);
+  loop();
+}
