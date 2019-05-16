@@ -1,0 +1,32 @@
+#include <stdio.h> 
+#include<stdlib.h>
+#define N 10
+int main()
+{
+	int opcion;
+	FILE *pcontrasena;
+	char cad[N];
+	errno_t err1;
+	err1 = fopen_s(&pcontrasena, "contrasena.txt", "w");
+	if (err1 == 0)
+		printf("Apertura correcta\n");
+	else
+		printf("Apertura incorrecta\n");
+	printf("Elige una opcion:1)cambiar al contrasena 2)mantener la anterior\n");
+	scanf_s("%d", &opcion);
+	switch (opcion)
+	{
+	case 1:
+		printf("Dime la nueva contrasena\t");
+		getchar();
+		gets_s(cad);
+		fprintf(pcontrasena, "la nueva contraseña es %s", cad);
+		break;
+	case 2:
+		printf("Se mantiene la contrasena anterior\t");
+		break;
+	default:
+		printf("opcion incorrecta\t");
+	}
+	system("PAUSE");
+}  
