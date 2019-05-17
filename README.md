@@ -1,11 +1,10 @@
 # Título del trabajo
-
-Descripción breve del proyecto a realizar (2-3 frases).
+Coche controlado por Bluetooth con contraseña.
 
 ## Integrantes del equipo
 
-Nombres, apellidos, y usuario GitHub de los integrantes del equipo.
+Santiago Galicia González(sgalicia9), Gonzalo Barroso Fernández(gbarrosof).
 
 ## Objetivos del trabajo
 
-Lista de los objetivos que se persiguen con el trabajo propuesto.
+El correcto funcionamiento del vehículo en todas las direcciones y la posibilidad del usuario de introducir la contraseña que desee.
